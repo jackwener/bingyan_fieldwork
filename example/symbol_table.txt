@@ -1,0 +1,12 @@
+入口地址	变量名
+0			main
+1			_a
+2			ch
+3			floatb
+4			centigrade
+5			fd
+6			printf
+7			scanf
+8			a
+9			b
+10			fahrenheit
