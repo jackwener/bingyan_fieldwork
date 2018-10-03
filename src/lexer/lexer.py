@@ -104,7 +104,7 @@ def getToken(mystr):
         _p += 1
 
 
-    if ch in string.ascii_letters or ch == '_':    # letter(letter|digit)*
+    if ch in string.ascii_letters or ch == '_': # letter(letter|digit)*
         while ch in string.ascii_letters or ch in string.digits or ch == '_' or ch in _abnormalChar:
             _value += ch
             ch = mystr[_p]
@@ -324,7 +324,7 @@ def getToken(mystr):
         _value = ch
         _syn = 'SEMI'
         
-    elif ch == '(':             #  '('
+    elif ch == '(':             # '('
         _value = ch
         _syn = 'LP'
         
@@ -377,7 +377,7 @@ if __name__ == '__main__':
         elif _syn == 'error7':
             print('number ' + _value + ' 不合法,包含字母! Error in line ' + str(_line))
         else:
-            #print((_syn,_value))
+            # print((_syn,_value))
             tokenFile.write(str(_syn)+' , '+_value+'\n')
         
     tokenFile.close()
