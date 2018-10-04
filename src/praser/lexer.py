@@ -97,13 +97,17 @@ def clear_comment(contents):
     return contents
 
 
-def get_token(mystr, p, syn, val):
-    global _mstate, _dstate, _line, _cstate, ch
-
+def get_token(mystr, p, line):
+    global _mstate, _dstate, _cstate, ch
+    syn = ''
     val = ''
+    lens = len(mystr)
+    if p >= lens:
+        syn = '#'
+        return p, syn, val, line
     ch = mystr[p]
     p += 1
-    while ch == ' ' or ch == '\n':
+    while ch == ' ':
         ch = mystr[p]
         p += 1
 
@@ -188,7 +192,7 @@ def get_token(mystr, p, syn, val):
                     syn = 'INT'               # digit+
                 else:
                     if val.count('.') == 1:
-                        syn = 'FRACTION'           # Floating point number 
+                        syn = 'FLOAT'           # Floating point number
                     else:
                         syn = 'error5'                
         p -= 1
@@ -231,9 +235,9 @@ def get_token(mystr, p, syn, val):
         if ch == '=':           # '<='
             val += ch
             p += 1
-            syn = '<='
+            syn = 'RELOP'
         else:                   # '<'
-            syn = '<'
+            syn = 'RELOP'
         
     elif ch == '>': 
         val = ch
@@ -242,9 +246,9 @@ def get_token(mystr, p, syn, val):
         if ch == '=':           # '>='
             val += ch
             p += 1
-            syn = '>='
+            syn = 'RELOP'
         else:                   # '>'
-            syn = '>'
+            syn = 'RELOP'
             
     elif ch == '!': 
         val = ch
@@ -253,7 +257,7 @@ def get_token(mystr, p, syn, val):
         if ch == '=':           # '!='
             val += ch
             p += 1
-            syn = '!='
+            syn = 'RELOP'
         else:                   # '!'
             syn = 'NOT'
 
@@ -286,7 +290,7 @@ def get_token(mystr, p, syn, val):
         if ch == '=':            # '=='
             val += ch
             p += 1
-            syn = '=='
+            syn = 'RELOP'
         else:                  # '='
             syn = 'ASSIGNOP'
     
@@ -353,5 +357,6 @@ def get_token(mystr, p, syn, val):
         syn = 'COMMA'
 
     elif ch == '\n':
-        syn = 'error1'
-    return p, syn, val
+        line += 1
+        p, syn, val, line = get_token(mystr, p, line)
+    return p, syn, val, line

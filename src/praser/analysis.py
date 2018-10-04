@@ -6,8 +6,11 @@ class AST(object):
         self.lChild = None
         self.rChild = None
 '''
+end = ('SEMI','ID','STRUCT','RETURN','IF','ELSE','WHILE',
+'RC','LC','RP','LP','FLOAT','INT','NOT','DOT','OR','AND',
+'DIV','STAR','MINUS','PLUS','RELOP','ASSIGNOP','COMMA')
+
 p = 0
-m = 0
 value = ''
 token = ''
 syn = ''
@@ -16,16 +19,18 @@ content = ''
 line = 0
 state = ''
 
-
+list_value = []
+list_syn = []
+list_line = []
+m = 0
 
 def Program():
-    print("Program")
     ExtDefList()
 
 
 def ExtDefList():
-    print("ExtDefList")
-    global syn, value, p, lists
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     num = 0
     while ExtDef():
         num += 1
@@ -35,15 +40,18 @@ def ExtDefList():
         return False
 
 def ExtDef():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if Specifier():
         if FunDec():
             if CompSt():
                 return True
             return False
-        elif ExtDefList():
+        elif ExtDecList():
             if SEMI():
                 return True
+            else :
+                return False
         else:
             if SEMI():
                 return True
@@ -51,43 +59,61 @@ def ExtDef():
         return False
 
 def ExtDecList():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if VarDec():
         if COMMA():
             if ExtDecList():
                 return True
+            m = m_tmp
             return False
         return True
+    m = m_tmp
     return False
 
 
 def Specifier():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if TYPE():
         return True
     elif StructSpecifier():
         return True
     else:
+        m = m_tmp
         return False
 
 def StructSpecifier():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if STRUCT():
         if LC():
             if DefList():
                 if RC():
                     return True
+                else:
+                    m = m_tmp
+                    return False
+            else:
+                m = m_tmp
+                return False
+        else:
+            m = m_tmp
+            return False
+    m = m_tmp
     return False
 
 def VarDec():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if ID():
         return True
     else:
         return False
 
 def FunDec():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if ID():
         if LP():
             if VarList():
@@ -96,11 +122,14 @@ def FunDec():
             else:
                 if RP():
                     return True
+        m = m_tmp
+    m = m_tmp
     return False
 
 
 def VarList():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if ParamDec():
         if COMMA():
             if VarDec():
@@ -111,36 +140,51 @@ def VarList():
 
 
 def ParamDec():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if Specifier():
         if VarDec():
             return True
     return False
 
 def CompSt():
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if LC():
         if DefList():
             if StmtList():
                 if RC():
                     return True
-    return False
+                else:
+                    m = m_tmp
+            else:
+                m = m_tmp
+                return False
+        else:
+            m = m_tmp
+            return False
+    else:
+        m = m_tmp
+        return False
 
 def StmtList():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     num = 0
     while Stmt():
         num += 1
-    if num >= 1:
-        return True
-    else:
-        return False
+    return True
 
 
 def Stmt():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if Exp():
         if SEMI():
             return True
+        else:
+            m = m_tmp
+            return False
     elif CompSt():
         return True
     elif IF():
@@ -151,48 +195,81 @@ def Stmt():
                         if ELSE():
                             if Stmt():
                                 return True
+                            else:
+                                m = m_tmp
+                                return False
+                        else:
+                            m = m_tmp
+                            return False
                     return True
+                else:
+                    m = m_tmp
+                    return False
+            else:
+                m = m_tmp
+                return False
+        else:
+            m = m_tmp
+            return False
     elif WHILE():
         if LP():
             if Exp():
                 if RP():
                     if Stmt():
                         return True
+                    else:
+                        m = m_tmp
+                        return False
+                else:
+                    m = m_tmp
+                    return False
+            else:
+                m = m_tmp
+                return False
+        else:
+            m = m_tmp
+            return False
     else:
+        m = m_tmp
         return False
 
 def DefList():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     num = 0
     while Def():
         num += 1
-    if num >= 1:
-        return True
-    else:
-        return False
+    return True
 
 def Def():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if Specifier():
         if DecList():
             if SEMI():
                 return True
+            else:
+                m = m_tmp
+                return False
+        else:
+            m = m_tmp
+            return False
     else:
         return False
 
 def DecList():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if Dec():
         if COMMA():
             if DecList():
-                if SEMI():
-                    return True
-                return False
+                return True
         return True
     return False
 
 def Dec():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if VarDec():
         if ASSIGNOP():
             if Exp():
@@ -202,16 +279,28 @@ def Dec():
     return False
 
 def Exp():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if LP():
         if Exp():
             if RP():
                 if Exp1():
                     return True
+                else:
+                    m = m_tmp
+                    return False
+            else:
+                m = m_tmp
+        else:
+            m = m_tmp
     elif MINUS():
         if Exp():
             if Exp1():
                 return True
+            else:
+                m = m_tmp
+        else:
+            m = m_tmp
     elif NOT():
         if Exp():
             if Exp1():
@@ -235,7 +324,8 @@ def Exp():
             return True
 
 def Exp1():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if ASSIGNOP():
         if Exp():
             return True
@@ -264,7 +354,8 @@ def Exp1():
         return True
 
 def Args():
-    global syn, value, p
+    global list_line, list_syn, list_value, m
+    m_tmp = m
     if Exp():
         if COMMA():
             if Args():
@@ -273,205 +364,229 @@ def Args():
         return True
     return False
 
+def TYPE():
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if INT():
+        return True
+    elif FLOAT():
+        return True
+    else:
+        m = m_tmp
+        return False
+
+
 def COMMA():
-    global syn, value, p
-    if syn == 'COMMA':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'COMMA':
         print('COMMA')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def ASSIGNOP():
-    global syn, value, p
-    if syn == 'ASSIGNOP':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'ASSIGNOP':
         print('ASSIGNOP')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def RELOP():
-    global syn, value, p
-    if syn == 'RELOP':
-        print('DIV')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'RELOP':
+        print('RELOP')
+        m += 1
         return True
 
 
 def PLUS():
-    global syn, value, p
-    if syn == 'PLUS':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'PLUS':
         print('PLUS')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def MINUS():
-    global syn, value, p
-    if syn == 'MINUS':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'MINUS':
         print('MINUS')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def STAR():
-    global syn, value, p
-    if syn == 'STAR':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'STAR':
         print('STAR')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 
 def DIV():
-    global syn, value, p
-    if syn == 'DIV':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'DIV':
         print('DIV')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def AND():
-    global syn, value, p
-    if syn == 'AND':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'AND':
         print('AND')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def OR():
-    global syn, value, p
-    if syn == 'OR':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'OR':
         print('OR')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def DOT():
-    global syn, value, p
-    if syn == 'DOT':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'DOT':
         print('DOT')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def NOT():
-    global syn, value, p
-    if syn == 'NOT':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'NOT':
         print('NOT')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
-
-
-def TYPE():
-    print("TYPE")
-    global syn, value, p
-    if INT():
-        return True
-    elif FLOAT():
-        return
-    else:
-        return False
 
 def INT():
-    global syn, value, p
-    if syn == 'INT':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'INT':
         print('INT')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def FLOAT():
-    global syn, value, p
-    if syn == 'FLOAT':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'FLOAT':
         print('FLOAT')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def LP():
-    global syn, value, p
-    if syn == 'LP':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'LP':
         print('LP')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def RP():
-    global syn, value, p
-    if syn == 'RP':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'RP':
         print('RP')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def LC():
-    global syn, value, p
-    if syn == 'LC':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'LC':
         print('LC')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def RC():
-    global syn, value, p
-    if syn == 'RC':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'RC':
         print('RC')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def STRUCT():
-    global syn, value, p
-    if syn == 'STRUCT':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'STRUCT':
         print('STRUCT')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def RETURN():
-    global syn, value, p
-    if syn == 'RETURN':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'RETURN':
         print('RETURN')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def IF():
-    global syn, value, p
-    if syn == 'IF':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'IF':
         print('IF')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def ELSE():
-    global syn, value, p
-    if syn == 'ELSE':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'ELSE':
         print('ELSE')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 def WHILE():
-    global syn, value, p
-    if syn == 'WHILE':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'WHILE':
         print('WHILE')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def ID():
-    global syn, value, p
-    if syn == 'ID':
+    global list_line, list_syn, list_value, m
+    m_tmp = m
+    if list_syn[m] == 'ID':
         print('ID')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True
 
 
 def SEMI():
-    global syn, value, p
-    if syn == 'SEMI':
+    global list_line, list_syn, list_value, m
+    if list_syn[m] == 'SEMI':
         print('SEMI')
-        p, syn, value = lexer.get_token(content, p, syn, value)
+        m += 1
         return True  # SEMI匹配后跳
 
 
 if __name__ == '__main__':
     content = lexer.get_code(content)
     content = lexer.clear_comment(content)
-    symbolTableFile = open(r'/home/jakevin/symbol_table.txt', 'w')
-    tokenFile = open(r'/home/jakevin/token.txt', 'w')
-    p, syn, value = lexer.get_token(content, p, syn, value)
+    while syn != "#":
+        p, syn, value, line = lexer.get_token(content, p, line)
+        list_line.append(line)
+        list_syn.append(syn)
+        list_value.append(value)
     Program()
-    tokenFile.close()
-
