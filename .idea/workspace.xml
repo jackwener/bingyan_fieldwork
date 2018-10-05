@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b41a315f-71d9-4a44-90ff-984469f00be6" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/praser/analysis.py" afterPath="$PROJECT_DIR$/src/praser/analysis.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,7 +21,7 @@
         <entry file="file://$PROJECT_DIR$/src/praser/analysis.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="744">
-              <caret line="770" column="18" lean-forward="false" selection-start-line="770" selection-start-column="18" selection-end-line="770" selection-end-column="18" />
+              <caret line="770" column="19" lean-forward="true" selection-start-line="770" selection-start-column="19" selection-end-line="770" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -336,7 +335,14 @@
       <option name="project" value="LOCAL" />
       <updated>1538676517635</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="parser">
+      <created>1538738247237</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1538738247237</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView">
@@ -350,9 +356,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="1080" width="1920" height="1080" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15795091" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15795091" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921812" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -378,7 +383,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="10.3" />
     <MESSAGE value="10.4" />
-    <option name="LAST_COMMIT_MESSAGE" value="10.4" />
+    <MESSAGE value="parser" />
+    <option name="LAST_COMMIT_MESSAGE" value="parser" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -543,7 +549,7 @@
     <entry file="file://$PROJECT_DIR$/src/praser/analysis.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="744">
-          <caret line="770" column="18" lean-forward="false" selection-start-line="770" selection-start-column="18" selection-end-line="770" selection-end-column="18" />
+          <caret line="770" column="19" lean-forward="true" selection-start-line="770" selection-start-column="19" selection-end-line="770" selection-end-column="19" />
           <folding />
         </state>
       </provider>
