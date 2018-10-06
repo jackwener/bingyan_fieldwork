@@ -4,22 +4,29 @@ import string
 import operator
 
 '''
-'error2' #错误代码，字符串不封闭
-'error3' #错误代码，数字以0开头
-'error4' #错误代码，字符不封闭
-'error5' #错误代码，浮点数中包含多个点，如1.2.3 
-'error6' #错误代码，标识符中含有非法字符
-'error7' #错误代码，数字和字母混合，如12AB56等
+'error1' #错误代码，字符串不封闭
+'error2' #错误代码，数字以0开头
+'error3' #错误代码，字符不封闭
+'error4' #错误代码，浮点数中包含多个点，如1.2.3 
+'error5' #错误代码，标识符中含有非法字符
+'error6' #错误代码，数字和字母混合，如12AB56等
 '''
 
+
+# key word
 _key = ("auto","break","case","char","const","continue","default",
 "do","double","else","enum","extern","float","for",
 "goto","if","int","long","register","return","short",
 "signed","static","sizeof","struct","switch","typedef","union",
-"unsigned","void","volatile","while")  # key word
+"unsigned","void","volatile","while") 
 
-_abnormalChar = '@#$%^&*~' # Illegal characters that may appear in the identifier
+# Illegal characters that may appear in the identifier
+abnormalChar = '@#$%^&*~' 
 
+
+'''
+global var
+'''
 _syn = ''  # Type of word
 _p = 0  # Subscript
 _value = ''  # Store words analyzed by lexer
@@ -32,7 +39,7 @@ _symbol = []  # Symbol table
 ch = ''
 
 # Save keywords and identifiers into the symbol table
-def inSymbolTable(token):
+def symbol_in(token):
     global _symbol
     if token not in _symbol:
         _symbol.append(token)
@@ -112,15 +119,15 @@ def get_token(mystr, p, line):
         p += 1
 
     if ch in string.ascii_letters or ch == '_':  # letter(letter|digit)*
-        while ch in string.ascii_letters or ch in string.digits or ch == '_' or ch in _abnormalChar:
+        while ch in string.ascii_letters or ch in string.digits or ch == '_' or ch in abnormalChar:
             val += ch
             ch = mystr[p]
             p += 1
         p -= 1
         
-        for abnormal in _abnormalChar:
+        for abnormal in abnormalChar:
             if abnormal in val:
-                syn = 'error6' 
+                syn = 'error5' 
                 break
             else:
                 syn = 'ID'
@@ -130,7 +137,7 @@ def get_token(mystr, p, line):
                 syn = val.upper()               # key word
                 break
         if syn == 'ID':
-            inSymbolTable(val)
+            symbol_in(val)
             
     elif ch == '\"':                        # string
         while ch in string.ascii_letters or ch in '\"% ':
@@ -146,7 +153,7 @@ def get_token(mystr, p, line):
             p += 1
             
         if _mstate == 1:
-            syn = 'error2'     
+            syn = 'error1'     
             _mstate = 0
             
         elif _mstate == 2:
@@ -179,12 +186,12 @@ def get_token(mystr, p, line):
         
         for char in string.ascii_letters:
             if char in val:
-                syn = 'error7' 
+                syn = 'error6' 
                 _dstate = 0
                 
-        if syn != 'error7':
+        if syn != 'error6':
             if _dstate == 5:
-                syn = 'error3' 
+                syn = 'error2' 
                 _dstate = 0
             else:    
                 _dstate = 0
@@ -194,7 +201,7 @@ def get_token(mystr, p, line):
                     if val.count('.') == 1:
                         syn = 'FLOAT'           # Floating point number
                     else:
-                        syn = 'error5'                
+                        syn = 'error4'                
         p -= 1
 
     elif ch == '\'':  # char
@@ -225,7 +232,7 @@ def get_token(mystr, p, line):
             syn = 'CHARACTER'
             _cstate = 0
         else:
-            syn = 'error4'   
+            syn = 'error3'   
             _cstate = 0
                     
     elif ch == '<': 

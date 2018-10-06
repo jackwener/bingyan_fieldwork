@@ -1,27 +1,20 @@
 import lexer
-'''
-class AST(object):
-    def __init__(self, item):
-        self.key = item
-        self.lChild = None
-        self.rChild = None
-'''
+
 end = ('SEMI','ID','STRUCT','RETURN','IF','ELSE','WHILE',
 'RC','LC','RP','LP','FLOAT','INT','NOT','DOT','OR','AND',
 'DIV','STAR','MINUS','PLUS','RELOP','ASSIGNOP','COMMA')
 
 
-p = 0
-value = ''
-token = ''
-syn = ''
-ch = ''
-content = ''
-line = 0
-state = ''
+p = 0   # the index of content
+value = '' # the value
+token = '' # store token
+syn = '' # the type of token
+content = '' # the content of code
+line = 0    # the line
 
-list = []
+list = [] # output the consequence
 
+# 模拟三元数组，store the tokens and types and lines of token
 list_value = []
 list_syn = []
 list_line = []
@@ -43,9 +36,12 @@ def ExtDefList():
 
 def ExtDef():
     global list_line, list_syn, list_value, m
+    list.append('ExtDef')
     m_tmp = m
     n = 0
     if list_syn[m] == '#':
+        while list.pop() != 'ExtDef':
+            n += 1
         return False
     elif Specifier():
         if FunDec():
@@ -751,18 +747,18 @@ if __name__ == '__main__':
     content = lexer.clear_comment(content)
     while syn != "#":
         p, syn, value, line = lexer.get_token(content, p, line)
-        if syn == 'error2':
-            print('string ' + value + ' 不封闭! Error in line ' + str(line))
+        if syn == 'error1':
+            print('string ' + value + ' Not closed! Error in line ' + str(line))
+        elif syn == 'error2':
+            print('number ' + value + ' Cannot start with 0! Error in line ' + str(line))
         elif syn == 'error3':
-            print('number ' + value + ' 错误，不能以0开头! Error in line ' + str(line))
+            print('char ' + value + ' Not closed! Error in line ' + str(line))
         elif syn == 'error4':
-            print('char ' + value + ' 不封闭! Error in line ' + str(line))
+            print('number ' + value + ' illegal! Error in line ' + str(line))
         elif syn == 'error5':
-            print('number ' + value + ' 不合法! Error in line ' + str(line))
+            print('identifier' + value + ' contain illegal characters!Error in line ' + str(line))
         elif syn == 'error6':
-            print('identifier' + value + ' 不能包含非法字符!Error in line ' + str(line))
-        elif syn == 'error7':
-            print('number ' + value + ' 不合法,包含字母! Error in line ' + str(line))
+            print('number ' + value + ' Contains letters! Error in line ' + str(line))
         list_line.append(line)
         list_syn.append(syn)
         list_value.append(value)
