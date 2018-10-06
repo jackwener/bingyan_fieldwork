@@ -1,0 +1,64 @@
+Program  ExtDefList
+ExtDefList  ExtDef ExtDefList
+|
+# 表示一个全局变量、结构体或函数的定义
+ExtDef  Specifier (ExtDecList SEMI  | SEMI | FunDec CompSt)
+
+ExtDecList  VarDec(COMMA ExtDecList| )
+
+Specifier  TYPE    # 类型描述符,一种是Specifier -> TYPE ,另一种是Specifier -> StructSpecifier
+| StructSpecifier
+StructSpecifier  STRUCT OptTag LC DefList RC
+
+| STRUCT Tag
+OptTag  ID
+| 
+Tag  ID
+
+VarDec  ID
+| VarDec LB INT RB
+FunDec  ID LP VarList RP
+| ID LP RP
+VarList  ParamDec COMMA VarList
+| ParamDec
+ParamDec  Specifier VarDec
+
+CompSt  LC DefList StmtList RC
+StmtList  Stmt StmtList
+| 
+Stmt  Exp SEMI
+| CompSt
+| RETURN Exp SEMI
+| IF LP Exp RP Stmt
+| IF LP Exp RP Stmt ELSE Stmt
+| WHILE LP Exp RP Stmt
+
+DefList  Def DefList
+| 
+Def  Specifier DecList SEMI
+DecList  Dec
+| Dec COMMA DecList
+Dec  VarDec
+| VarDec ASSIGNOP Exp
+
+Exp | LP Exp RP Exp'
+    | MINUS Exp Exp'
+    | NOT Exp Exp'
+    | ID LP Args RP Exp'
+    | ID LP RP Exp'
+    | ID Exp'
+    | INT Exp'
+    | FLOAT Exp'
+Exp'  ASSIGNOP Exp
+    | AND Exp
+    | OR Exp
+    | RELOP Exp
+    | PLUS Exp
+    | MINUS Exp
+    | STAR Exp
+    | DIV Exp
+    | DOT ID 
+    | ''
+
+Args  Exp COMMA Args
+    | Exp
