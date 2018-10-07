@@ -14,13 +14,25 @@ line = 0    # the line
 
 list = [] # output the consequence
 
+symbols = []
+types = []
+scope = []
+
 # 模拟三元数组，store the tokens and types and lines of token
 list_value = []
 list_syn = []
 list_line = []
 m = 0
 
+# symbol table node
+class Symbol(object):
+    def __init__(self,id,type,scope):
+        self.id = id
+        self.type = type
+        self.scope = scope
+
 def Program():
+    scope.append('global')
     global L
     if ExtDefList():
         print("success")
@@ -44,6 +56,7 @@ def ExtDef():
             n += 1
         return False
     elif Specifier():
+        types.append(list[-1])
         if FunDec():
             if CompSt():
                 return True
@@ -149,6 +162,8 @@ def FunDec():
     n = 0
     m_tmp = m
     if ID():
+        symbols.append(Symbol(list[-1],types.pop(),'FUNC'))
+        scope.append(list[-1])
         if LP():
             if VarList():
                 if RP():
@@ -174,6 +189,8 @@ def VarList():
     if ParamDec():
         if COMMA():
             if VarDec():
+                symbols.append(Symbol(list[-1], types[-1], 'FUNC'))
+                types.pop()
                 return True
         else:
             return True
@@ -189,7 +206,9 @@ def ParamDec():
     n = 0
     m_tmp = m
     if Specifier():
+        types.append(list[-1])
         if VarDec():
+            symbols.append(Symbol(list[-1], types[-1], 'FUNC'))
             return True
     while list.pop() == 'ParamDec':
         n += 1
@@ -524,10 +543,10 @@ def TYPE():
     m_tmp = m
     if list_syn[m] == 'INT':
         m += 1
-        list.append(':INT')
+        list.append('INT')
         return True
     elif list_syn[m] == 'FLOAT':
-        list.append(':FLOAT')
+        list.append('FLOAT')
         m += 1
         return True
     else:

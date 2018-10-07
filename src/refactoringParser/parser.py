@@ -58,10 +58,24 @@ line = 0
 
 tokens = []
 
+symbols = []
+
+scope_list = []  # store scope of current
+
+
+# symbol table node
+class Symbol(object):
+    def __init__(self,id,type,scope):
+        self.id = id
+        self.type = type
+        self.scope = scope
+
+
 class Token(object):
     def __init__(self,type,value):
         self.type = type
         self.value = value
+
 
 class SyntaxTreeNode(object):
     """

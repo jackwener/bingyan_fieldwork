@@ -46,7 +46,7 @@ def symbol_in(token):
 
 # get content from file
 def get_code(contents):
-    f = open(r'/home/jakevin/test.txt', 'r')
+    f = open(r'/home/jakevin/bingyan_fieldwork/src/refactoringParser/test.txt', 'r')
     for line in f:
         if line != '\n':
             contents = contents + line.lstrip()
