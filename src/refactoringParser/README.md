@@ -8,7 +8,7 @@
 
 在层数深的情况下，这对于语法分析和语义分析造成了很大的困难，并且递归造成的回溯解决问题时，
 
-容易使得语法和语义分析不易分开，建树拆开会进行两次递归模拟，很麻烦，不拆开其中的数据结构又
+容易使得语法和语义分析不易分开，建树拆开会进行两次递归模拟，很麻烦，不拆开,其中的数据结构又
 
 难以维护，debug时会花费大量时间对于递归过程分析。
 
@@ -18,7 +18,7 @@
 
 > 句子
 
-Sentence --> Include | Statement | Assignment | Control | Expression | Constant | FunctionStatement | FunctionCall 
+Sentence -->Statement | Assignment | Control | Expression | Constant | FunctionStatement | FunctionCall 
 
 > 声明语句
 
