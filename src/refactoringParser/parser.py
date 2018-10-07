@@ -1,9 +1,8 @@
 import lexer
 
-# token比较大的分类
 TOKEN_STYLE = ['KEY_WORD', 'IDENTIFIER', 'DIGIT_CONSTANT',
                'OPERATOR', 'SEPARATOR', 'STRING_CONSTANT', 'CHAR_CONSTANT']
-# 将关键字、运算符、分隔符进行具体化
+
 DETAIL_TOKEN_STYLE = {
     'include': 'INCLUDE',
     'int': 'INT',
@@ -40,14 +39,14 @@ DETAIL_TOKEN_STYLE = {
     '\'': 'SINGLE_QUOTE',
     ';': 'SEMICOLON',
     '#': 'SHARP'}
-# 关键字
+# key word
 keywords = [['int', 'float', 'double', 'char', 'void'],
             ['if', 'for', 'while', 'do', 'else'],
             ['include', 'return']]
-# 运算符
+# operator
 operators = ['=', '&', '<', '>', '++', '--',
              '+', '-', '*', '/', '>=', '<=', '!=']
-# 分隔符
+# separator
 delimiters = ['(', ')', '{', '}', '[', ']', ',', '\"', ';', '\'']
 
 p = 0
@@ -94,14 +93,11 @@ class SyntaxTreeNode(object):
 
 
 class SyntaxTree(object):
-    """
-    语法树, 由语法节点构成
-    """
 
     def __init__(self):
-        # 树的根节点
+        # root
         self.root = None
-        # 现在遍历到的节点
+        # the current node when travelling
         self.current = None
 
     # 添加一个子节点，必须确定father在该树中
@@ -135,9 +131,6 @@ class SyntaxTree(object):
 
 
 class Parser_(object):
-    """
-    语法分析器
-    """
 
     def __init__(self,tokens):
         # tokens
@@ -275,14 +268,14 @@ class Parser_(object):
                         tree = SyntaxTree()
                         tree.current = tree.root = SyntaxTreeNode('Statement')
                         self.tree.add_child_node(tree.root, father)
-                        # 类型
+                        # tyoe
                         variable_type = SyntaxTreeNode('Type')
                         tree.add_child_node(variable_type)
                         # extra_info
-                        # 类型
+                        # type
                         tree.add_child_node(
                             SyntaxTreeNode(tmp_variable_type, 'FIELD_TYPE', {'type': tmp_variable_type}))
-                        # 变量名
+                        # var name
                         tree.add_child_node(SyntaxTreeNode(self.tokens[self.index].value, 'IDENTIFIER', {
                             'type': 'VARIABLE', 'variable_type': tmp_variable_type}), tree.root)
                     self.index += 1
@@ -321,7 +314,7 @@ class Parser_(object):
             while self.tokens[tmp_index].type != 'RL_BRACKET':
                 tmp_index += 1
             self._expression(while_tree.root, tmp_index)
-            # while内容部分
+            # while content
             self.index += 1
             if self.tokens[self.index].type == 'LB_BRACKET':
                 self._block(while_tree)
