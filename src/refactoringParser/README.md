@@ -18,7 +18,7 @@
 
 > 句子
 
-Sentence --> Include | Statement | Assignment | Control | Expression | Constant | FunctionStatement | FunctionCall 
+Sentence -->Statement | Assignment | Control | Expression | Constant | FunctionStatement | FunctionCall 
 
 > 声明语句
 
